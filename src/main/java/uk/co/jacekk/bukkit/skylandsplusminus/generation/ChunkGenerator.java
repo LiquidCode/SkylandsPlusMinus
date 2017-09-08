@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.server.v1_9_R1.Block;
-import net.minecraft.server.v1_9_R1.Blocks;
-import net.minecraft.server.v1_9_R1.ChunkSnapshot;
-import net.minecraft.server.v1_9_R1.IChunkProvider;
-import net.minecraft.server.v1_9_R1.NoiseGeneratorOctaves;
-import net.minecraft.server.v1_9_R1.WorldGenCanyon;
-import net.minecraft.server.v1_9_R1.WorldGenCaves;
-import net.minecraft.server.v1_9_R1.WorldGenCavesHell;
-import net.minecraft.server.v1_9_R1.WorldGenMineshaft;
-import net.minecraft.server.v1_9_R1.WorldGenNether;
-import net.minecraft.server.v1_9_R1.WorldGenStronghold;
-import net.minecraft.server.v1_9_R1.WorldGenVillage;
-import net.minecraft.server.v1_9_R1.WorldGenLargeFeature;
+import net.minecraft.server.v1_12_R1.Block;
+import net.minecraft.server.v1_12_R1.Blocks;
+import net.minecraft.server.v1_12_R1.ChunkSnapshot;
+import net.minecraft.server.v1_12_R1.IChunkProvider;
+import net.minecraft.server.v1_12_R1.NoiseGeneratorOctaves;
+import net.minecraft.server.v1_12_R1.WorldGenCanyon;
+import net.minecraft.server.v1_12_R1.WorldGenCaves;
+import net.minecraft.server.v1_12_R1.WorldGenCavesHell;
+import net.minecraft.server.v1_12_R1.WorldGenMineshaft;
+import net.minecraft.server.v1_12_R1.WorldGenNether;
+import net.minecraft.server.v1_12_R1.WorldGenStronghold;
+import net.minecraft.server.v1_12_R1.WorldGenVillage;
+import net.minecraft.server.v1_12_R1.WorldGenLargeFeature;
 
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_9_R1.generator.CraftChunkData;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.generator.CraftChunkData;
 import org.bukkit.generator.BlockPopulator;
 
 public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
@@ -497,7 +497,7 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 			}
 		}
 		
-		net.minecraft.server.v1_9_R1.World mcWorld = ((CraftWorld) world).getHandle();
+		net.minecraft.server.v1_12_R1.World mcWorld = ((CraftWorld) world).getHandle();
 		
 		Block[] blocks = new Block[65536];
 		

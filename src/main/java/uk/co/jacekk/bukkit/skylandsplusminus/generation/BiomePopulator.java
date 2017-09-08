@@ -2,13 +2,13 @@ package uk.co.jacekk.bukkit.skylandsplusminus.generation;
 
 import java.util.Random;
 
-import net.minecraft.server.v1_9_R1.BiomeBase;
-import net.minecraft.server.v1_9_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.BiomeBase;
+import net.minecraft.server.v1_12_R1.BlockPosition;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.generator.BlockPopulator;
 
 public class BiomePopulator extends BlockPopulator {
