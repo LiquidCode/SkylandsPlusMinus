@@ -7,6 +7,7 @@ package uk.co.jacekk.bukkit.skylandsplusminus;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
@@ -24,6 +25,11 @@ public class PlayerMovementWorker implements Runnable {
         for (Player player : this.plugin.getServer().getOnlinePlayers()) {
             testForSkylandsWarp(player);
             testForOverworldWarp(player);
+        }
+
+        // Teleport items, mobs etc. down from Skylands
+        for (World world : this.plugin.getServer().getWorlds()) {
+            testForSkylandsEntities(world);
         }
     }
         
@@ -49,8 +55,8 @@ public class PlayerMovementWorker implements Runnable {
             }
         }
     }
-        
-    public void testForOverworldWarp(Player player) {
+
+    public void testForOverworldWarp(Entity player) {
         Location loc = player.getLocation();
         if (loc.getWorld().getEnvironment() != World.Environment.NORMAL || (
                 !(loc.getWorld().getGenerator() instanceof uk.co.jacekk.bukkit.skylandsplusminus.generation.ChunkGenerator)
@@ -63,9 +69,11 @@ public class PlayerMovementWorker implements Runnable {
             String worldname = loc.getWorld().getName();
             worldname = worldname.substring(0, worldname.length() - "_skylands".length());
             World target = this.plugin.getServer().getWorld(worldname);
+        
             if (target == null) {
                 return;
             }
+
             Location targetLoc = new Location(target, loc.getBlockX(), target.getMaxHeight() + 8, loc.getBlockZ());
             targetLoc.setPitch(loc.getPitch());
             targetLoc.setYaw(loc.getYaw());
@@ -75,5 +83,19 @@ public class PlayerMovementWorker implements Runnable {
                 this.plugin.fallingEntities.add(player);
             }
         }
+    }
+
+    public void testForSkylandsEntities(World world) {
+        // Only process skylands worlds
+        if (!(world.getGenerator() instanceof uk.co.jacekk.bukkit.skylandsplusminus.generation.ChunkGenerator
+                || world.getName().endsWith("_skylands"))) {
+            return;
+        }
+
+        world.getEntities().forEach((entity) -> {
+            if (!(entity instanceof Player)) {
+                this.testForOverworldWarp(entity);
+            }
+        });
     }
 }
