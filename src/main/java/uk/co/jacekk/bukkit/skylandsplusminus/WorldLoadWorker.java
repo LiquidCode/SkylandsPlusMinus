@@ -41,7 +41,7 @@ public class WorldLoadWorker implements Runnable {
             String skylandsLevelName = level+"_skylands";
             WorldCreator wc = new WorldCreator(skylandsLevelName);
             wc = wc.seed(this.plugin.getServer().getWorld(level).getSeed());
-            wc = wc.generator(new uk.co.jacekk.bukkit.skylandsplusminus.generation.ChunkGenerator("offset=128,village,canyon,mineshaft,village,largefeatures,mushroom,swampland"));
+            wc = wc.generator(new uk.co.jacekk.bukkit.skylandsplusminus.generation.ChunkGenerator("offset=128"));
             wc = wc.environment(World.Environment.NORMAL);
             wc = wc.type(WorldType.NORMAL);
             wc = wc.generateStructures(true);
