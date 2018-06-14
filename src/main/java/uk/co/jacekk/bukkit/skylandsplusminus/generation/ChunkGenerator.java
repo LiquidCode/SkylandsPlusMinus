@@ -60,13 +60,6 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 	int[][] i = new int[32][32];
 	
 	private int offset, liquid;
-	private boolean only, canyon, stronghold, mineshaft, village, largefeature, bedrock;
-	private boolean no_plains, no_desert, no_forest, no_jungle, no_taiga, no_ice, no_ocean;
-	private boolean no_mushroom = true;
-	private boolean no_swampland = true;
-	private Biome onlybiome, plains, desert, forest, jungle, taiga, ice, ocean;
-	private Biome mushroom = Biome.FOREST;
-	private Biome swampland = Biome.ICE_FLATS;
 	byte liquid_id;
 	
 	public ChunkGenerator(String id){
@@ -75,74 +68,10 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 		for (int i = 0; i < tokens.length; i++){
 			if (tokens[i].matches("offset={1}-?\\d{1,3}")){
 				offset = Integer.parseInt(tokens[i].substring(7));
-			}else if (tokens[i].equals("canyon")){
-				canyon = true;
-			}else if (tokens[i].equals("stronghold")){
-				stronghold = true;
-			}else if (tokens[i].equals("mineshaft")){
-				mineshaft = true;
-			}else if (tokens[i].equals("village")){
-				village = true;
-			}else if (tokens[i].equals("largefeatures")){
-				largefeature = true;
-			}else if (tokens[i].equals("bedrock")){
-				bedrock = true;
-			}else if (tokens[i].equals("no-desert")){
-				no_desert = true;
-				desert = Biome.PLAINS;
-			}else if (tokens[i].equals("no-forest")){
-				no_forest = true;
-				forest = Biome.PLAINS;
-			}else if (tokens[i].equals("no-jungle")){
-				no_jungle = true;
-				jungle = Biome.PLAINS;
-			}else if (tokens[i].equals("no-taiga")){
-				no_taiga = true;
-				taiga = Biome.PLAINS;
-			}else if (tokens[i].equals("no-ice")){
-				no_ice = true;
-				ice = Biome.PLAINS;
-			}else if (tokens[i].equals("no-ocean")){
-				no_ocean = true;
-				ocean = Biome.PLAINS;
-			}else if (tokens[i].equals("mushroom")){
-				no_mushroom = false;
-			}else if (tokens[i].equals("swampland")){
-				no_swampland = false;
-			}else if (tokens[i].matches("only={1}[A-Z_]+")){
-				only = true;
-				onlybiome = Biome.valueOf(tokens[i].substring(5));
-			}else if (tokens[i].matches("plains={1}[A-Z_]+")){
-				no_plains = true;
-				plains = Biome.valueOf(tokens[i].substring(7));
-			}else if (tokens[i].matches("desert={1}[A-Z_]+")){
-				no_desert = true;
-				desert = Biome.valueOf(tokens[i].substring(7));
-			}else if (tokens[i].matches("forest={1}[A-Z_]+")){
-				no_forest = true;
-				forest = Biome.valueOf(tokens[i].substring(7));
-			}else if (tokens[i].matches("jungle={1}[A-Z_]+")){
-				no_jungle = true;
-				jungle = Biome.valueOf(tokens[i].substring(7));
-			}else if (tokens[i].matches("taiga={1}[A-Z_]+")){
-				no_taiga = true;
-				taiga = Biome.valueOf(tokens[i].substring(6));
-			}else if (tokens[i].matches("ice={1}[A-Z_]+")){
-				no_ice = true;
-				ice = Biome.valueOf(tokens[i].substring(4));
-			}else if (tokens[i].matches("mushroom={1}[A-Z_]+")){
-				no_mushroom = true;
-				mushroom = Biome.valueOf(tokens[i].substring(9));
-			}else if (tokens[i].matches("swampland={1}[A-Z_]+")){
-				no_swampland = true;
-				swampland = Biome.valueOf(tokens[i].substring(10));
-			}else if (tokens[i].matches("ocean={1}[A-Z_]+")){
-				no_ocean = true;
-				ocean = Biome.valueOf(tokens[i].substring(5));
-			}else if (tokens[i].matches("water={1}\\d{1,3}")){
+			} else if (tokens[i].matches("water={1}\\d{1,3}")) {
 				liquid = Integer.parseInt(tokens[i].substring(6)) + 1;
 				liquid_id = (byte) Material.WATER.getId();
-			}else if (tokens[i].matches("lava={1}\\d{1,3}")){
+			} else if (tokens[i].matches("lava={1}\\d{1,3}")) {
 				liquid = Integer.parseInt(tokens[i].substring(5)) + 1;
 				liquid_id = (byte) Material.LAVA.getId();
 			}
@@ -368,89 +297,29 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 				
 				Block b1, b2;
 				
-				if (only == true){
-					biomes.setBiome(x, z, onlybiome);
-					biome = onlybiome;
-				}else{
-					if (no_plains == true){
-						if (biome == Biome.PLAINS){
-							biomes.setBiome(x, z, plains);
-							biome = plains;
-						}
-					}
-					if (no_desert == true){
-						if (biome == Biome.DESERT || biome == Biome.DESERT_HILLS){
-							biomes.setBiome(x, z, desert);
-							biome = desert;
-						}
-					}
-					if (no_forest == true){
-						if (biome == Biome.FOREST || biome == Biome.FOREST_HILLS){
-							biomes.setBiome(x, z, forest);
-							biome = forest;
-						}
-					}
-					if (no_jungle == true){
-						if (biome == Biome.JUNGLE || biome == Biome.JUNGLE_HILLS){
-							biomes.setBiome(x, z, jungle);
-							biome = jungle;
-						}
-					}
-					if (no_taiga == true){
-						if (biome == Biome.TAIGA || biome == Biome.TAIGA_HILLS){
-							biomes.setBiome(x, z, taiga);
-							biome = taiga;
-						}
-					}
-					if (no_ice == true){
-						if (biome == Biome.ICE_FLATS || biome == Biome.ICE_MOUNTAINS){
-							biomes.setBiome(x, z, ice);
-							biome = ice;
-						}
-					}
-					if (no_mushroom == true){
-						if (biome == Biome.MUSHROOM_ISLAND || biome == Biome.MUSHROOM_ISLAND_SHORE){
-							biomes.setBiome(x, z, mushroom);
-							biome = mushroom;
-						}
-					}
-					if (no_swampland == true){
-						if (biome == Biome.SWAMPLAND){
-							biomes.setBiome(x, z, swampland);
-							biome = swampland;
-						}
-					}
-					if (no_ocean == true){
-						if (biome == Biome.OCEAN){
-							biomes.setBiome(x, z, ocean);
-							biome = ocean;
-						}
-					}
-				}
-				
-				if (biome == Biome.DESERT || biome == Biome.DESERT_HILLS){
+				if (biome == Biome.DESERT || biome == Biome.DESERT_HILLS) {
 					b1 = Blocks.SAND;
 					b2 = Blocks.SAND;
-				}else if (biome == Biome.HELL){
+				} else if (biome == Biome.HELL) {
 					b1 = Blocks.NETHERRACK;
 					b2 = Blocks.NETHERRACK;
-				}else if (biome == Biome.MUSHROOM_ISLAND || biome == Biome.MUSHROOM_ISLAND_SHORE){
+				} else if (biome == Biome.MUSHROOM_ISLAND || biome == Biome.MUSHROOM_ISLAND_SHORE) {
 					b1 = Blocks.MYCELIUM;
 					b2 = Blocks.DIRT;
-				}else{
+				} else {
 					b1 = Blocks.GRASS;
 					b2 = Blocks.DIRT;
 				}
 				
-				for (int y = 127; y >= 0; --y){
+				for (int y = 127; y >= 0; --y) {
 					int l1 = x * 16 + z;
 					int i2 = l1 * 128 + y;
 					
 					Block b3 = blocks[i2];
 					
-					if (b3 == Blocks.AIR){
+					if (b3 == Blocks.AIR) {
 						j1 = -1;
-					}else if (b3 == Blocks.STONE){
+					}else if (b3 == Blocks.STONE) {
 						if (j1 == -1){
 							j1 = i1;
 							blocks[i2] = b1;
@@ -458,7 +327,7 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 							--j1;
 							blocks[i2] = b2;
 							
-							if (j1 == 0 && b2 == Blocks.SAND){
+							if (j1 == 0 && b2 == Blocks.SAND) {
 								j1 = this.random.nextInt(4);
 								b2 = Blocks.SANDSTONE;
 							}
@@ -470,10 +339,10 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 	}
 	
 	@Override
-	public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomes){
+	public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomes) {
 		Environment environment = world.getEnvironment();
 		
-		if (this.random == null){
+		if (this.random == null) {
 			this.random = new Random(world.getSeed());
 			
 			this.k = new NoiseGeneratorOctaves(this.random, 16);
@@ -483,7 +352,7 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 			this.a = new NoiseGeneratorOctaves(this.random, 10);
 			this.b = new NoiseGeneratorOctaves(this.random, 16);
 			
-			if (environment == Environment.NORMAL){
+			if (environment == Environment.NORMAL) {
 				this.caveGen = new WorldGenCaves();
 				this.canyonGen = new WorldGenCanyon();
 				this.strongholdGen = new WorldGenStronghold();
@@ -491,7 +360,7 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 				this.villageGen = new WorldGenVillage();
 				this.largefeatureGen = new WorldGenLargeFeature();
 				
-			}else if (environment == Environment.NETHER){
+			} else if (environment == Environment.NETHER) {
 				this.caveGenNether = new WorldGenCavesHell();
 				this.genNetherFort = new WorldGenNether();
 			}
@@ -504,29 +373,19 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 		this.random.setSeed(chunkX * 341873128712L + chunkZ * 132897987541L);
 		
 		this.shapeLand(world, chunkX, chunkZ, blocks);
-		
-                IChunkProvider provider = ((CraftWorld) world).getHandle().getChunkProviderServer();
-                ChunkSnapshot cs = new ChunkSnapshot();
-                
-		if (environment == Environment.NORMAL){
+
+		IChunkProvider provider = ((CraftWorld) world).getHandle().getChunkProviderServer();
+		ChunkSnapshot cs = new ChunkSnapshot();
+
+		if (environment == Environment.NORMAL) {
 			this.caveGen.a(mcWorld, chunkX, chunkZ, cs);
-			
-			if (canyon == true){
-				this.canyonGen.a(mcWorld, chunkX, chunkZ, cs);
-			}
-			if (stronghold == true){
-				this.strongholdGen.a(mcWorld, chunkX, chunkZ, cs);
-			}
-			if (mineshaft == true){
-				this.mineshaftGen.a(mcWorld, chunkX, chunkZ, cs);
-			}
-			if (village == true){
-				this.villageGen.a(mcWorld, chunkX, chunkZ, cs);
-			}
-			if (largefeature == true){
-				this.largefeatureGen.a(mcWorld, chunkX, chunkZ, cs);
-			}
-		}else if (environment == Environment.NETHER){
+			this.canyonGen.a(mcWorld, chunkX, chunkZ, cs);
+			this.strongholdGen.a(mcWorld, chunkX, chunkZ, cs);
+			this.mineshaftGen.a(mcWorld, chunkX, chunkZ, cs);
+			this.villageGen.a(mcWorld, chunkX, chunkZ, cs);
+			this.largefeatureGen.a(mcWorld, chunkX, chunkZ, cs);
+
+		} else if (environment == Environment.NETHER) {
 			this.caveGenNether.a(mcWorld, chunkX, chunkZ, cs);
 			this.genNetherFort.a(mcWorld, chunkX, chunkZ, cs);
 		}
@@ -536,43 +395,39 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 		int cut_top = 0;
 		int cut_bottom = 0;
 		
-		if (offset > 128){
+		if (offset > 128) {
 			cut_top = offset - 128;
-		}else if (offset < 0){
+		} else if (offset < 0) {
 			cut_bottom = -offset;
 		}
 		
 		ChunkData chunk = new CraftChunkData(world);
 		
 		// TODO: Do this in a nice way.
-		for (int x = 0; x < 16; ++x){
-                    for (int y = 0 + cut_bottom; y < 128 - cut_top; ++y){
-                        for (int z = 0; z < 16; ++z){
-                            Block block = blocks[(x * 16 + z) * 128 + y];
-                            Material mat;
-                            
-                            if (block == null) {
-                                mat = Material.AIR;
-                            } else {
-                                // TODO: Find a way to get materials by Minecraft material name
-                                // - block IDs are deprecated and block names does not exactly
-                                // map 1:1 to a material.
-                                
-                                // As of MC 1.9.2, Block.a() returns the Minecraft material name,
-                                // but I can't see a way to look up materials using it.
-                                mat = Material.getMaterial((Integer) Block.REGISTRY.a(block));
-                            }
-                            chunk.setBlock(x, y + offset, z, mat);
+		for (int x = 0; x < 16; ++x) {
+			for (int y = 0 + cut_bottom; y < 128 - cut_top; ++y) {
+				for (int z = 0; z < 16; ++z){
+					Block block = blocks[(x * 16 + z) * 128 + y];
+					Material mat;
 
-                            if (bedrock == true && y == 0){
-                                chunk.setBlock(x, y - cut_bottom, z, Material.BEDROCK);
-                            }
+					if (block == null) {
+						mat = Material.AIR;
+					} else {
+						// TODO: Find a way to get materials by Minecraft material name
+						// - block IDs are deprecated and block names does not exactly
+						// map 1:1 to a material.
 
-                            if (liquid > 0 && y <= liquid - 1 + cut_bottom && chunk.getType(x, y - cut_bottom, z) == Material.AIR) {
-                                chunk.setBlock(x, y - cut_bottom, z, Material.getMaterial(liquid_id));
-                            }
-                        }
-                    }
+						// As of MC 1.9.2, Block.a() returns the Minecraft material name,
+						// but I can't see a way to look up materials using it.
+						mat = Material.getMaterial((Integer) Block.REGISTRY.a(block));
+					}
+					chunk.setBlock(x, y + offset, z, mat);
+
+					if (liquid > 0 && y <= liquid - 1 + cut_bottom && chunk.getType(x, y - cut_bottom, z) == Material.AIR) {
+						chunk.setBlock(x, y - cut_bottom, z, Material.getMaterial(liquid_id));
+					}
+				}
+			}
 		}
 		
 		return chunk;
