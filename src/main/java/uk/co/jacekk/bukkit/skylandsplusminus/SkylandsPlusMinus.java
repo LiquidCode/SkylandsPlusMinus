@@ -44,5 +44,17 @@ public class SkylandsPlusMinus extends JavaPlugin {
 		}
 		return new uk.co.jacekk.bukkit.skylandsplusminus.generation.ChunkGenerator(id);
 	}
-	
+
+	public void cleanFallingEntities() {
+
+	    for (Entity entity : new ArrayList<Entity>(this.fallingEntities)) {
+            if (entity.isOnGround()) {
+                this.fallingEntities.remove(entity);
+            }
+
+            if (!entity.isValid() || entity.isDead()) {
+                this.fallingEntities.remove(entity);
+            }
+        }
+    }
 }
