@@ -4,19 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.server.v1_12_R1.Block;
-import net.minecraft.server.v1_12_R1.Blocks;
-import net.minecraft.server.v1_12_R1.ChunkSnapshot;
-import net.minecraft.server.v1_12_R1.IChunkProvider;
-import net.minecraft.server.v1_12_R1.NoiseGeneratorOctaves;
-import net.minecraft.server.v1_12_R1.WorldGenCanyon;
-import net.minecraft.server.v1_12_R1.WorldGenCaves;
-import net.minecraft.server.v1_12_R1.WorldGenCavesHell;
-import net.minecraft.server.v1_12_R1.WorldGenMineshaft;
-import net.minecraft.server.v1_12_R1.WorldGenNether;
-import net.minecraft.server.v1_12_R1.WorldGenStronghold;
-import net.minecraft.server.v1_12_R1.WorldGenVillage;
-import net.minecraft.server.v1_12_R1.WorldGenLargeFeature;
+import net.minecraft.server.v1_12_R1.*;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -36,18 +24,9 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 	private NoiseGeneratorOctaves o;
 	private NoiseGeneratorOctaves a;
 	private NoiseGeneratorOctaves b;
-	
-	private WorldGenCaves caveGen;
-	
-	private WorldGenCanyon canyonGen;
-	private WorldGenStronghold strongholdGen;
-	private WorldGenMineshaft mineshaftGen;
-	private WorldGenVillage villageGen;
-	private WorldGenLargeFeature largefeatureGen;
-	
-	private WorldGenCavesHell caveGenNether;
-	private WorldGenNether genNetherFort;
-	
+
+    private List<WorldGenBase> worldGens = new ArrayList<WorldGenBase>();
+
 	private double[] q;
 	private double[] t = new double[256];
 	
@@ -337,7 +316,32 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 			}
 		}
 	}
-	
+
+    /**
+     * Get the list of active world generators for this environment.
+     *
+     * @param environment The environment for the world we're working on
+     * @return A list of {WorldGenBase}s that can be called in order to apply features etc.
+     */
+	private List<WorldGenBase> getWorldGens(Environment environment) {
+        List<WorldGenBase> worldGens = new ArrayList<WorldGenBase>();
+
+        if (environment == Environment.NORMAL) {
+            worldGens.add(new WorldGenCaves());
+            worldGens.add(new WorldGenCanyon());
+            worldGens.add(new WorldGenStronghold());
+            worldGens.add(new WorldGenMineshaft());
+            worldGens.add(new WorldGenVillage());
+            worldGens.add(new WorldGenLargeFeature());
+
+        } else if (environment == Environment.NETHER) {
+            worldGens.add(new WorldGenCavesHell());
+            worldGens.add(new WorldGenNether());
+        }
+
+        return worldGens;
+    }
+
 	@Override
 	public ChunkData generateChunkData(World world, Random random, int chunkX, int chunkZ, BiomeGrid biomes) {
 		Environment environment = world.getEnvironment();
@@ -351,19 +355,8 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 			this.o = new NoiseGeneratorOctaves(this.random, 4);
 			this.a = new NoiseGeneratorOctaves(this.random, 10);
 			this.b = new NoiseGeneratorOctaves(this.random, 16);
-			
-			if (environment == Environment.NORMAL) {
-				this.caveGen = new WorldGenCaves();
-				this.canyonGen = new WorldGenCanyon();
-				this.strongholdGen = new WorldGenStronghold();
-				this.mineshaftGen = new WorldGenMineshaft();
-				this.villageGen = new WorldGenVillage();
-				this.largefeatureGen = new WorldGenLargeFeature();
-				
-			} else if (environment == Environment.NETHER) {
-				this.caveGenNether = new WorldGenCavesHell();
-				this.genNetherFort = new WorldGenNether();
-			}
+
+			this.worldGens = this.getWorldGens(environment);
 		}
 		
 		net.minecraft.server.v1_12_R1.World mcWorld = ((CraftWorld) world).getHandle();
@@ -377,18 +370,10 @@ public class ChunkGenerator extends org.bukkit.generator.ChunkGenerator {
 		IChunkProvider provider = ((CraftWorld) world).getHandle().getChunkProviderServer();
 		ChunkSnapshot cs = new ChunkSnapshot();
 
-		if (environment == Environment.NORMAL) {
-			this.caveGen.a(mcWorld, chunkX, chunkZ, cs);
-			this.canyonGen.a(mcWorld, chunkX, chunkZ, cs);
-			this.strongholdGen.a(mcWorld, chunkX, chunkZ, cs);
-			this.mineshaftGen.a(mcWorld, chunkX, chunkZ, cs);
-			this.villageGen.a(mcWorld, chunkX, chunkZ, cs);
-			this.largefeatureGen.a(mcWorld, chunkX, chunkZ, cs);
-
-		} else if (environment == Environment.NETHER) {
-			this.caveGenNether.a(mcWorld, chunkX, chunkZ, cs);
-			this.genNetherFort.a(mcWorld, chunkX, chunkZ, cs);
-		}
+		// Apply enabled worldgens (caves, structures etc.)
+		for (WorldGenBase worldGen : this.worldGens) {
+            worldGen.a(mcWorld, chunkX, chunkZ, cs);
+        }
 		
 		this.decorateLand(chunkX, chunkZ, blocks, biomes);
 		
